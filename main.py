@@ -10,7 +10,10 @@ import webbrowser
 import ifcopenshell
 from ifctester import ids, reporter
 
-filepath = r"T:\Projekte_Revit\10643\V1605_TP1_Seewasserzentrale\00_ANE\10_IFC_aktuelle_Modelle_BIMCollab\V1605_SSC_SZK_TE_3_U99.ifc"
+# Load IFC file and extract its filename
+
+
+filepath = r"ADD_PATH"
 my_ifc = ifcopenshell.open(filepath)
 file_name = filepath.split("\\")[-1]
 # Create new IDS
