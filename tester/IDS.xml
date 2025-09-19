@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ids xmlns="http://standards.buildingsmart.org/IDS" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://standards.buildingsmart.org/IDS http://standards.buildingsmart.org/IDS/1.0/ids.xsd">
+    <info>
+        <title>My IDS
+                V1605_SSC_SZK_TE_3_U99.ifc</title>
+        <copyright>luca.moretti@anex.ch</copyright>
+        <version>V1.0</version>
+        <description>BESCHREIBUNG</description>
+        <purpose>Modellprüfung</purpose>
+        <milestone>Abgabe</milestone>
+    </info>
+    <specifications>
+        <specification name="Generic specification" ifcVersion="IFC2X3 IFC4 IFC4X3_ADD2" description="HIER STEHT NOCH EINE BESCHREIBUNG">
+            <applicability minOccurs="0" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCVALVE</simpleValue>
+                    </name>
+                </entity>
+            </applicability>
+            <requirements>
+                <property dataType="IFCLENGTHMEASURE" cardinality="required" instructions="'Durchmesser DN' muss im PropertySet 'Pset_ANEX' vorhanden sein und einen numerischen Wert haben.">
+                    <propertySet>
+                        <simpleValue>Pset_ANEX</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Durchmesser DN</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:number" />
+                    </value>
+                </property>
+                <property dataType="IFCTEXT" cardinality="required" instructions="'Kennzeichen' muss definiert sein">
+                    <propertySet>
+                        <simpleValue>Pset_ANEX</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Kennzeichen</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="^[A-Z]\d{2}-[A-Z]{2}\d{3}$" />
+                        </xs:restriction>
+                    </value>
+                </property>
+                <property dataType="IFCTEXT" cardinality="required" instructions="'Anlage' muss definiert sein">
+                    <propertySet>
+                        <simpleValue>Pset_ANEX</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Anlage</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="^[A-Z]\d{2}$" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+        <specification name="IfcHeatExchanger specification" ifcVersion="IFC2X3 IFC4 IFC4X3_ADD2" description="HIER STEHT NOCH EINE BESCHREIBUNG">
+            <applicability minOccurs="0" maxOccurs="unbounded">
+                <entity>
+                    <name>
+                        <simpleValue>IFCHEATEXCHANGER</simpleValue>
+                    </name>
+                </entity>
+            </applicability>
+            <requirements>
+                <property dataType="IFCTEXT" cardinality="required" instructions="'Kennzeichen' muss definiert sein">
+                    <propertySet>
+                        <simpleValue>Pset_ANEX</simpleValue>
+                    </propertySet>
+                    <baseName>
+                        <simpleValue>Kennzeichen</simpleValue>
+                    </baseName>
+                    <value>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="^[A-Z]\d{2}-[A-Z]{2}\d{3}$" />
+                        </xs:restriction>
+                    </value>
+                </property>
+            </requirements>
+        </specification>
+    </specifications>
+</ids>

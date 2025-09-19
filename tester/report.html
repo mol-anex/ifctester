@@ -1,0 +1,1877 @@
+<!--
+    IfcTester - IDS based model auditing
+    Copyright (C) 2022 Dion Moult <dion@thinkmoult.com>
+
+    This file is part of IfcTester.
+
+    IfcTester is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    IfcTester is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with IfcTester.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE html>
+<html lang=>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="foobaro">
+    <title></title>
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa|Inconsolata|Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #97cc64;
+            --light-green: #b6cca1;
+            --red: #fb5a3e;
+            --light-red: #fbb4a8;
+        }
+        body { font-family: 'Arial', sans-serif; padding: 10px 40px; }
+        section { padding: 15px; border-radius: 5px; border: 1px solid #eee; margin-bottom: 15px; }
+        section>h2 { margin-top: 0px; }
+        span.time { color: #999; font-style: italic; float: right; }
+        span.step-time { float: right; color: #555; font-size: 0.8em; font-style: italic; }
+        span.item { padding: 5px; border-radius: 5px; margin-right: 5px; border: 1px solid #eee; }
+        span.item.pass, span.item.fail { color: #FFF; font-weight: bold; border: 0px; }
+        p.fail { background-color: #fb5a3e; padding: 5px; border-radius: 5px; color: #fff; }
+        p.unspecified { background-color: #994f00; padding: 5px; border-radius: 5px; color: #fff; }
+        p.skipped { background-color: #8b8d8f; padding: 5px; border-radius: 5px; color: #fff; }
+        p.description { background-color: #eee; border-radius: 5px; padding: 20px; margin-left: auto; margin-right: auto; display: inline-block; font-weight: bold;}
+        li { padding: 10px; font-family: monospace; border-radius: 5px; margin-bottom: 5px; }
+        li.pass { background-color: var(--light-green); color: #333; }
+        li.fail { background-color: var(--light-red); color: #900; }
+        li.unspecified { background-color: #ffd37f; color: #a30; }
+        li.skipped { background-color: #f5f5f5; color: #333; }
+        li p { margin-bottom: 0px; }
+        footer { color: #999; font-size: 0.8em; }
+        header { text-align: center; }
+        hr { margin: 20px; margin-left: 0px; margin-right: 0px;  border: none; border-top: 1px solid #ccc; }
+        summary { display: flex; cursor: pointer; }
+        summary::-webkit-details-marker { display: none; }
+        * {box-sizing:border-box}
+        .container { width: 100%; background-color: #ddd; border-radius: 5px}
+        .percent { text-align: left; padding-top: 5px; padding-left: 5px; padding-bottom: 5px; color: white; border-radius: 5px; white-space: nowrap; }
+        .pass { background-color: var(--green); }
+        .fail { background-color: var(--red); }
+        table { width: 100%; border-spacing: 0; border-radius: 5px; margin-top: 10px; }
+        th, td { padding: 5px; color: #000; }
+        table.pass { border-bottom: 2px solid var(--green); }
+        table.fail { border-bottom: 2px solid var(--red); }
+        table thead>tr { font-weight: bold; color: #000; }
+        table.pass tbody tr { border-bottom: 1px solid var(--green); }
+        table.fail tbody tr { border-bottom: 1px solid var(--red); }
+        tbody tr:nth-child(odd) { background-color: rgba(1, 1, 1, 0.05); }
+        tbody tr:nth-child(even) { background-color: rgba(1, 1, 1, 0.1); }
+        tbody tr:hover { background-color: rgba(0, 0, 0, 0); }
+        div.info { float: left; width: 30%; }
+        div.results { float: left; width: calc(70% - 20px); margin-left: 20px; padding: 20px; border-radius: 5px; background-color: #fafafa; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>My IDS
+                V1605_SSC_SZK_TE_3_U99.ifc</h1>
+        <p><strong>2025-09-19 08:33:50</strong></p>
+    </header>
+    <h2>Summary</h2>
+    <div class="container">
+        <div class="fail percent" style="width: 35%;">35%</div>
+    </div>
+    <p>
+        <span class="item fail">Fail</span>
+        <span class="item">
+            Specifications passed: <strong>1</strong> / <strong>2</strong>
+        </span>
+        <span class="item">
+            Requirements passed: <strong>2</strong> / <strong>4</strong>
+        </span>
+        <span class="item">
+            Checks passed: <strong>124</strong> / <strong>351</strong>
+        </span>
+    </p>
+    <hr>
+    <section style="clear: both; overflow: hidden;">
+        <div class="info">
+            <h2>Generic specification</h2>
+            <p>HIER STEHT NOCH EINE BESCHREIBUNG</p>
+
+            <div class="container">
+                <div class="fail percent" style="width: 33%;">33%</div>
+            </div>
+            <p>
+                <span class="item fail">Fail</span>
+                <span class="item">
+                    Checks passed: <strong>115</strong> / <strong>342</strong>
+                </span>
+                <span class="item">
+                    Elements passed: <strong>0</strong> / <strong>114</strong>
+                </span>
+            </p>
+        </div>
+        <div class="results">
+            <p>
+                <strong>Applicability</strong>
+            </p>
+            <ul>
+                <li>All IFCVALVE data</li>
+            </ul>
+            <p>
+                <strong>Requirements</strong>
+            </p>
+            <ol>
+                <li class="fail">
+                    <details>
+                        <summary>
+                            Durchmesser DN data shall be {} and in the dataset Pset_ANEX
+                        </summary>
+ 
+                        <table class="fail">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>PredefinedType</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Warning</th>
+                                    <th>GlobalId</th>
+                                    <th>Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ZWV_MOT1:ARM_ZWV_MOT-2-Wegeventil motorisiert DN65:2613195</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkY</td>
+                                    <td>2613195</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613200</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkv</td>
+                                    <td>2613200</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613227</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgk2</td>
+                                    <td>2613227</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613266</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>0pPamkQ6P0URY8EZMBTfHx</td>
+                                    <td>2613266</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613269</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>0pPamkQ6P0URY8EZMBTfHy</td>
+                                    <td>2613269</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2644160</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2E1OyBWaD8UQZ7OE_Jn7Pb</td>
+                                    <td>2644160</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2657586</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzoy1E</td>
+                                    <td>2657586</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2644167</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2E1OyBWaD8UQZ7OE_Jn7PY</td>
+                                    <td>2644167</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>RN 31201.22 Standard-Verteilbatterie mit Redfil rcksplbar:31201.22:2672728</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouKa</td>
+                                    <td>2672728</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672932</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouHO</td>
+                                    <td>2672932</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672958</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouH2</td>
+                                    <td>2672958</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673079</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouJB</td>
+                                    <td>2673079</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673105</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIj</td>
+                                    <td>2673105</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673225</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSr</td>
+                                    <td>2673225</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673251</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSV</td>
+                                    <td>2673251</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673372</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouUW</td>
+                                    <td>2673372</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 10 more of the same element type (anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot; with Tag 1954632 and GlobalId 3pPFX8N_L7UvVbcNAs0whe) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672941</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouHH</td>
+                                    <td>2672941</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672967</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGx</td>
+                                    <td>2672967</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673088</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIy</td>
+                                    <td>2673088</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673114</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIc</td>
+                                    <td>2673114</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673234</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSk</td>
+                                    <td>2673234</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673260</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSG</td>
+                                    <td>2673260</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673381</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouUP</td>
+                                    <td>2673381</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 10 more of the same element type (anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot; with Tag 1954632 and GlobalId 2nasIitsPDUeNPc5qLJB$8) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2672987</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGd</td>
+                                    <td>2672987</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673010</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGE</td>
+                                    <td>2673010</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673134</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouII</td>
+                                    <td>2673134</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673157</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTv</td>
+                                    <td>2673157</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673280</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVy</td>
+                                    <td>2673280</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673303</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVh</td>
+                                    <td>2673303</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673427</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPl</td>
+                                    <td>2673427</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 10 more of the same element type (anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad with Tag 927143 and GlobalId 0q$$gbj_LF89dHTDUC0OQd) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673013</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouG9</td>
+                                    <td>2673013</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673018</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouG6</td>
+                                    <td>2673018</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673160</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTq</td>
+                                    <td>2673160</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673165</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTn</td>
+                                    <td>2673165</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673306</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVc</td>
+                                    <td>2673306</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673311</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVZ</td>
+                                    <td>2673311</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673453</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPH</td>
+                                    <td>2673453</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 9 more of the same element type (anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert with Tag 1916908 and GlobalId 3ij0HFO6f8SxDfwEOm4mGm) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673023</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouG3</td>
+                                    <td>2673023</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673170</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTk</td>
+                                    <td>2673170</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673316</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVO</td>
+                                    <td>2673316</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673462</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPA</td>
+                                    <td>2673462</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673609</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouQr</td>
+                                    <td>2673609</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673756</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou4W</td>
+                                    <td>2673756</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673899</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou6N</td>
+                                    <td>2673899</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 2 more of the same element type (anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80 with Tag 2027253 and GlobalId 0q$$gbj_LF89dHTDUC0PNj) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673044</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouJe</td>
+                                    <td>2673044</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673191</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTR</td>
+                                    <td>2673191</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673337</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouV5</td>
+                                    <td>2673337</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673483</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouOt</td>
+                                    <td>2673483</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673630</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouQY</td>
+                                    <td>2673630</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673777</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou4D</td>
+                                    <td>2673777</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673920</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou1y</td>
+                                    <td>2673920</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 2 more of the same element type (anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80 with Tag 2027253 and GlobalId 0q$$gbj_LF89dHTDUC0OXp) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682250</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzow3s</td>
+                                    <td>2682250</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682287</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzow3J</td>
+                                    <td>2682287</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682328</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzow2a</td>
+                                    <td>2682328</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682369</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzowDz</td>
+                                    <td>2682369</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682410</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzowDM</td>
+                                    <td>2682410</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682451</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2bNWnogtTE4gV0bXdzowCl</td>
+                                    <td>2682451</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2923673</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2Dm11jpyv95RFUx3C7JjGC</td>
+                                    <td>2923673</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2923693</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2Dm11jpyv95RFUx3C7JjGu</td>
+                                    <td>2923693</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2998437</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>1JVz7__1zBoB7e9w8OlfD3</td>
+                                    <td>2998437</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2998515</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>1JVz7__1zBoB7e9w8OlfCL</td>
+                                    <td>2998515</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2998526</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>1JVz7__1zBoB7e9w8OlfCO</td>
+                                    <td>2998526</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2963473</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>1d901jQOL8kAWV_Cyht9Xs</td>
+                                    <td>2963473</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2963745</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>1d901jQOL8kAWV_Cyht9b6</td>
+                                    <td>2963745</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992667</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0zF</td>
+                                    <td>2992667</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992704</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0yK</td>
+                                    <td>2992704</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992741</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0yn</td>
+                                    <td>2992741</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992778</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0$U</td>
+                                    <td>2992778</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992837</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_H</td>
+                                    <td>2992837</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992890</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_k</td>
+                                    <td>2992890</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992672</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0zq</td>
+                                    <td>2992672</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992709</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0yH</td>
+                                    <td>2992709</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992746</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0y_</td>
+                                    <td>2992746</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992783</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0$R</td>
+                                    <td>2992783</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992842</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_U</td>
+                                    <td>2992842</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992895</td>
+                                    <td>None</td>
+                                    <td>The property&#x27;s data type &quot;IfcText&quot; does not match the required data type of &quot;IfcLengthMeasure&quot;</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_h</td>
+                                    <td>2992895</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>amflo-mag-pro:amflo-mag-pro DN800:2994130</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0g6</td>
+                                    <td>2994130</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7"> ... 14 more failing elements not shown out of 114 total ...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </li>
+                <li class="pass">
+                    <details>
+                        <summary>
+                            Kennzeichen data shall be {&#x27;pattern&#x27;: &#x27;^[A-Z]\\d{2}-[A-Z]{2}\\d{3}$&#x27;} and in the dataset Pset_ANEX
+                        </summary>
+ 
+                        <table class="pass">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>PredefinedType</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>GlobalId</th>
+                                    <th>Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>amflo-mag-pro:amflo-mag-pro DN800:2994130</td>
+                                    <td>None</td>
+                                    <td>2ecfukl757hhRKjb3hZ0g6</td>
+                                    <td>2994130</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673558</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouRg</td>
+                                    <td>2673558</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673119</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIZ</td>
+                                    <td>2673119</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT1:EUG_PWT-Plattenwaermetauscher 400x500x900 - DN65 2:2613194</td>
+                                    <td>None</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkZ</td>
+                                    <td>2613194</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673412</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPu</td>
+                                    <td>2673412</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2672972</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGm</td>
+                                    <td>2672972</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673995</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzou0t</td>
+                                    <td>2673995</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ZWV_MOT1:ARM_ZWV_MOT-2-Wegeventil motorisiert DN65:2613195</td>
+                                    <td>None</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkY</td>
+                                    <td>2613195</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673265</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSD</td>
+                                    <td>2673265</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673705</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzou5L</td>
+                                    <td>2673705</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673850</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzou76</td>
+                                    <td>2673850</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </li>
+                <li class="fail">
+                    <details>
+                        <summary>
+                            Anlage data shall be {&#x27;pattern&#x27;: &#x27;^[A-Z]\\d{2}$&#x27;} and in the dataset Pset_ANEX
+                        </summary>
+ 
+                        <table class="pass">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>PredefinedType</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>GlobalId</th>
+                                    <th>Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ZWV_MOT1:ARM_ZWV_MOT-2-Wegeventil motorisiert DN65:2613195</td>
+                                    <td>None</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkY</td>
+                                    <td>2613195</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="fail">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>PredefinedType</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Warning</th>
+                                    <th>GlobalId</th>
+                                    <th>Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613200</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkv</td>
+                                    <td>2613200</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613227</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgk2</td>
+                                    <td>2613227</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613266</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>0pPamkQ6P0URY8EZMBTfHx</td>
+                                    <td>2613266</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR1:ARM_ASK_HAR-Absperrklappe Handrad 2:2613269</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>0pPamkQ6P0URY8EZMBTfHy</td>
+                                    <td>2613269</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2644160</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2E1OyBWaD8UQZ7OE_Jn7Pb</td>
+                                    <td>2644160</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2657586</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzoy1E</td>
+                                    <td>2657586</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2644167</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2E1OyBWaD8UQZ7OE_Jn7PY</td>
+                                    <td>2644167</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>RN 31201.22 Standard-Verteilbatterie mit Redfil rcksplbar:31201.22:2672728</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouKa</td>
+                                    <td>2672728</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672932</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouHO</td>
+                                    <td>2672932</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672958</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouH2</td>
+                                    <td>2672958</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673079</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouJB</td>
+                                    <td>2673079</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673105</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIj</td>
+                                    <td>2673105</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673225</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSr</td>
+                                    <td>2673225</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673251</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSV</td>
+                                    <td>2673251</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673372</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouUW</td>
+                                    <td>2673372</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 10 more of the same element type (anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot; with Tag 1954632 and GlobalId 3pPFX8N_L7UvVbcNAs0whe) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672941</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouHH</td>
+                                    <td>2672941</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2672967</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGx</td>
+                                    <td>2672967</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673088</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIy</td>
+                                    <td>2673088</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673114</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIc</td>
+                                    <td>2673114</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673234</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSk</td>
+                                    <td>2673234</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673260</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSG</td>
+                                    <td>2673260</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>STOPCOCK</td>
+                                    <td>anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot;:2673381</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouUP</td>
+                                    <td>2673381</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 10 more of the same element type (anex_ARM_KUH_GES:ARM_KUH_GES-Kugelhahn verschraubt DN 50 2&quot; with Tag 1954632 and GlobalId 2nasIitsPDUeNPc5qLJB$8) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2672987</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGd</td>
+                                    <td>2672987</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673010</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGE</td>
+                                    <td>2673010</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673134</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouII</td>
+                                    <td>2673134</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673157</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTv</td>
+                                    <td>2673157</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673280</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVy</td>
+                                    <td>2673280</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673303</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVh</td>
+                                    <td>2673303</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2673427</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPl</td>
+                                    <td>2673427</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 10 more of the same element type (anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad with Tag 927143 and GlobalId 0q$$gbj_LF89dHTDUC0OQd) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673013</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouG9</td>
+                                    <td>2673013</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673018</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouG6</td>
+                                    <td>2673018</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673160</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTq</td>
+                                    <td>2673160</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673165</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTn</td>
+                                    <td>2673165</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673306</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVc</td>
+                                    <td>2673306</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673311</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVZ</td>
+                                    <td>2673311</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2673453</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPH</td>
+                                    <td>2673453</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 9 more of the same element type (anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert with Tag 1916908 and GlobalId 3ij0HFO6f8SxDfwEOm4mGm) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673023</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouG3</td>
+                                    <td>2673023</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673170</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTk</td>
+                                    <td>2673170</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673316</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouVO</td>
+                                    <td>2673316</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673462</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPA</td>
+                                    <td>2673462</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673609</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouQr</td>
+                                    <td>2673609</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673756</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou4W</td>
+                                    <td>2673756</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673899</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou6N</td>
+                                    <td>2673899</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 2 more of the same element type (anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80 with Tag 2027253 and GlobalId 0q$$gbj_LF89dHTDUC0PNj) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673044</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouJe</td>
+                                    <td>2673044</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673191</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouTR</td>
+                                    <td>2673191</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673337</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouV5</td>
+                                    <td>2673337</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673483</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouOt</td>
+                                    <td>2673483</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673630</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzouQY</td>
+                                    <td>2673630</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673777</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou4D</td>
+                                    <td>2673777</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>SAFETYCUTOFF</td>
+                                    <td>anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80:2673920</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzou1y</td>
+                                    <td>2673920</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7">... 2 more of the same element type (anex_ARM_SHV_FLS:ARM_SHV_FLS-Sicherheitsventil geflanscht DN 50/80 with Tag 2027253 and GlobalId 0q$$gbj_LF89dHTDUC0OXp) not shown ...</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682250</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzow3s</td>
+                                    <td>2682250</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682287</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzow3J</td>
+                                    <td>2682287</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682328</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzow2a</td>
+                                    <td>2682328</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682369</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzowDz</td>
+                                    <td>2682369</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682410</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzowDM</td>
+                                    <td>2682410</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2682451</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2bNWnogtTE4gV0bXdzowCl</td>
+                                    <td>2682451</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2923673</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2Dm11jpyv95RFUx3C7JjGC</td>
+                                    <td>2923673</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2923693</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2Dm11jpyv95RFUx3C7JjGu</td>
+                                    <td>2923693</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2998437</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>1JVz7__1zBoB7e9w8OlfD3</td>
+                                    <td>2998437</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2998515</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>1JVz7__1zBoB7e9w8OlfCL</td>
+                                    <td>2998515</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2998526</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>1JVz7__1zBoB7e9w8OlfCO</td>
+                                    <td>2998526</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2963473</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>1d901jQOL8kAWV_Cyht9Xs</td>
+                                    <td>2963473</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2963745</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>1d901jQOL8kAWV_Cyht9b6</td>
+                                    <td>2963745</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992667</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0zF</td>
+                                    <td>2992667</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992704</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0yK</td>
+                                    <td>2992704</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992741</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0yn</td>
+                                    <td>2992741</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992778</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0$U</td>
+                                    <td>2992778</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992837</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_H</td>
+                                    <td>2992837</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_MOT:ARM_ASK_MOT-Absperrklappe motorisiert:2992890</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_k</td>
+                                    <td>2992890</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992672</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0zq</td>
+                                    <td>2992672</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992709</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0yH</td>
+                                    <td>2992709</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992746</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0y_</td>
+                                    <td>2992746</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992783</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0$R</td>
+                                    <td>2992783</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992842</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_U</td>
+                                    <td>2992842</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ASK_HAR:ARM_ASK_HAR-Absperrklappe Handrad:2992895</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0_h</td>
+                                    <td>2992895</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>amflo-mag-pro:amflo-mag-pro DN800:2994130</td>
+                                    <td>None</td>
+                                    <td>The property set does not contain the required property</td>
+                                    <td>2ecfukl757hhRKjb3hZ0g6</td>
+                                    <td>2994130</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="7"> ... 13 more failing elements not shown out of 113 total ...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </li>
+            </ol>
+        </div>
+    </section>
+    <section style="clear: both; overflow: hidden;">
+        <div class="info">
+            <h2>IfcHeatExchanger specification</h2>
+            <p>HIER STEHT NOCH EINE BESCHREIBUNG</p>
+
+            <div class="container">
+                <div class="pass percent" style="width: 100%;">100%</div>
+            </div>
+            <p>
+                <span class="item pass">Pass</span>
+                <span class="item">
+                    Checks passed: <strong>9</strong> / <strong>9</strong>
+                </span>
+                <span class="item">
+                    Elements passed: <strong>9</strong> / <strong>9</strong>
+                </span>
+            </p>
+        </div>
+        <div class="results">
+            <p>
+                <strong>Applicability</strong>
+            </p>
+            <ul>
+                <li>All IFCHEATEXCHANGER data</li>
+            </ul>
+            <p>
+                <strong>Requirements</strong>
+            </p>
+            <ol>
+                <li class="pass">
+                    <details>
+                        <summary>
+                            Kennzeichen data shall be {&#x27;pattern&#x27;: &#x27;^[A-Z]\\d{2}-[A-Z]{2}\\d{3}$&#x27;} and in the dataset Pset_ANEX
+                        </summary>
+ 
+                        <table class="pass">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>PredefinedType</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>GlobalId</th>
+                                    <th>Tag</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>amflo-mag-pro:amflo-mag-pro DN800:2994130</td>
+                                    <td>None</td>
+                                    <td>2ecfukl757hhRKjb3hZ0g6</td>
+                                    <td>2994130</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673558</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouRg</td>
+                                    <td>2673558</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673119</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouIZ</td>
+                                    <td>2673119</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT1:EUG_PWT-Plattenwaermetauscher 400x500x900 - DN65 2:2613194</td>
+                                    <td>None</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkZ</td>
+                                    <td>2613194</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673412</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouPu</td>
+                                    <td>2673412</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2672972</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouGm</td>
+                                    <td>2672972</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673995</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzou0t</td>
+                                    <td>2673995</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcValve</td>
+                                    <td>NOTDEFINED</td>
+                                    <td>anex_ARM_ZWV_MOT1:ARM_ZWV_MOT-2-Wegeventil motorisiert DN65:2613195</td>
+                                    <td>None</td>
+                                    <td>0pPamkQ6P0URY8EZMBTgkY</td>
+                                    <td>2613195</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673265</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzouSD</td>
+                                    <td>2673265</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673705</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzou5L</td>
+                                    <td>2673705</td>
+                                </tr>
+                                <tr>
+                                    <td>IfcHeatExchanger</td>
+                                    <td>PLATE</td>
+                                    <td>anex_EUG_PWT:EUG_PWT-Plattenwaermetauscher S251 IS-10 765:2673850</td>
+                                    <td>None</td>
+                                    <td>2bNWnogtTE4gV0bXdzou76</td>
+                                    <td>2673850</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </details>
+                </li>
+            </ol>
+        </div>
+    </section>
+    <hr>
+    <footer>
+        <p>
+            Report by the <a href="https://bonsaibim.org/">Bonsai</a> and <a href="http://ifcopenshell.org/">IfcOpenShell</a>.
+        </p>
+    </footer>
+</body>
+</html>
